@@ -9,7 +9,7 @@
     </div>
     <div class="row" v-if="loadingPoems">
       <div class="col">
-        <img src="@/assets/moving_quill.gif" alt="Loading...">
+        <img src="@/assets/images/moving_quill.gif" alt="Loading...">
       </div>
     </div>
   </div>
@@ -29,6 +29,7 @@ export default {
       // internal variables to hold all the loaded poems/titles
       poems: [],
       titles: [],
+      bottom: false,
       counter: 0,
       loadingPoems: false
     }
@@ -64,8 +65,8 @@ export default {
           self.titles = response.data.titles
           console.debug('Got', self.titles.length, 'titles')
           self.shuffle(self.titles)
-          self.loadPoem(self.titles[0], self.titles[1], self.titles[2])
-          self.counter = 3
+          // let's load 3 poems initially
+          self.loadPoem(self.titles[self.counter++], self.titles[self.counter++], self.titles[self.counter++])
         })
         .catch(e => {
           console.error(e)
@@ -82,13 +83,19 @@ export default {
       }
       return a
     },
-    // infinite scroll
-    scroll () {
-      window.onscroll = () => {
-        let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight
-        if (bottomOfWindow) {
-          this.loadPoem(this.titles[this.counter++])
-        }
+    // return true if the bottom of the page is visible
+    bottomVisible () {
+      const scrollY = window.scrollY
+      const visible = document.documentElement.clientHeight
+      const pageHeight = document.documentElement.scrollHeight
+      const bottomOfPage = visible + scrollY >= pageHeight
+      return bottomOfPage || pageHeight < visible
+    }
+  },
+  watch: {
+    bottom (bottom) {
+      if (bottom && !this.loadingPoems) {
+        this.loadPoem(this.titles[this.counter++])
       }
     }
   },
@@ -96,7 +103,10 @@ export default {
     this.loadTitles()
   },
   mounted () {
-    this.scroll()
+    // infinite scroll
+    window.onscroll = () => {
+      this.bottom = this.bottomVisible()
+    }
   }
 }
 </script>
