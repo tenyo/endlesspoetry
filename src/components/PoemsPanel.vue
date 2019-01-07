@@ -21,12 +21,6 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      // the base url of the API where we're getting the poems from
-      // using a CORS hack since the API doesn't Access-Control-Allow-Origin: *
-      api: 'https://cors.io/?http://poetrydb.org',
-      // length cutoff for poems - anything longer than maxLines won't be displayed
-      maxLines: 100,
-      // internal variables to hold all the loaded poems/titles
       poems: [],
       titles: [],
       bottom: false,
@@ -34,6 +28,7 @@ export default {
       loadingPoems: false
     }
   },
+  props: ['api', 'maxLines'],
   methods: {
     // loads the poem(s) with the given titles
     loadPoem (...titles) {
@@ -111,7 +106,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .container {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

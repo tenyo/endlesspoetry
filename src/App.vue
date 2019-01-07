@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <app-header></app-header>
-    <poems-panel></poems-panel>
+    <app-header :settings="settings"></app-header>
+    <poems-panel :api="settings.api" :maxLines="settings.maxLines"></poems-panel>
   </div>
 </template>
 
@@ -14,6 +14,18 @@ export default {
   components: {
     AppHeader,
     PoemsPanel
+  },
+  data () {
+    return {
+      settings: {
+        // the base url of the API where we're getting the poems from
+        // using a CORS hack since the API doesn't Access-Control-Allow-Origin: *
+        api: 'https://cors.io/?http://poetrydb.org',
+        // api: 'http://127.0.0.1:9292',
+        // length cutoff for poems - anything longer than maxLines won't be displayed
+        maxLines: 100
+      }
+    }
   }
 }
 </script>
