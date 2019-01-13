@@ -8,13 +8,30 @@
     <b-btn v-b-modal.settingsModal variant="secondary" size="sm">
       <svg class="icon icon-cog"><use xlink:href="#icon-cog"></use></svg>
     </b-btn>
-    <b-modal id="settingsModal" title="Settings" body-text-variant="dark" ok-only>
+    <b-modal id="settingsModal" v-model="show"
+      title="Settings" body-text-variant="dark"
+      @shown="resetSettings">
       <b-row class="my-1">
-        <b-col class="text-right"><label for="maxLines">Max lines:</label></b-col>
+        <b-col class="text-right">
+          <label for="maxLines" v-b-tooltip title="Only poems containing less than max lines will be displayed">
+            <u>Max lines:</u>
+          </label>
+        </b-col>
         <b-col>
-          <b-form-input id="maxLines" type="number" size="sm" v-model.lazy="settings.maxLines"></b-form-input>
+          <b-form-input id="maxLines" type="number" size="sm"
+            :state="maxLinesState" v-model.number="maxLines">
+          </b-form-input>
+          <b-form-invalid-feedback id="maxLinesLiveFeedback">
+            Enter at least 10 lines
+          </b-form-invalid-feedback>
         </b-col>
       </b-row>
+      <div slot="modal-footer" class="w-100">
+        <p class="float-left small"><a :href="settings.github" target="_blank">GitHub repo</a></p>
+        <b-btn size="sm" class="float-right" variant="primary" :disabled="!stateOk" @click="updateSettings">
+          Save
+        </b-btn>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -23,6 +40,34 @@
 export default {
   props: {
     settings: Object
+  },
+  data () {
+    return {
+      maxLines: this.settings.maxLines,
+      show: false
+    }
+  },
+  computed: {
+    maxLinesState () {
+      if (this.maxLines === this.settings.maxLines) {
+        return null
+      }
+      return this.maxLines >= 10
+    },
+    stateOk () {
+      return this.maxLinesState
+    }
+  },
+  methods: {
+    resetSettings () {
+      this.maxLines = this.settings.maxLines
+    },
+    updateSettings () {
+      this.show = false
+      if (this.maxLinesState) {
+        this.settings.maxLines = this.maxLines
+      }
+    }
   }
 }
 </script>
@@ -35,5 +80,9 @@ export default {
   stroke-width: 0;
   stroke: currentColor;
   fill: currentColor;
+}
+u {
+  border-bottom: 1px dotted #000;
+  text-decoration: none;
 }
 </style>
