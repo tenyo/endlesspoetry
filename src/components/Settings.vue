@@ -8,9 +8,9 @@
     <b-btn v-b-modal.settingsModal variant="secondary" size="sm">
       <svg class="icon icon-cog"><use xlink:href="#icon-cog"></use></svg>
     </b-btn>
-    <b-modal id="settingsModal" title="Settings" body-text-variant="dark"
-      ok-only :ok-disabled="!stateOk"
-      @ok="updateSettings" @shown="resetSettings">
+    <b-modal id="settingsModal" v-model="show"
+      title="Settings" body-text-variant="dark"
+      @shown="resetSettings">
       <b-row class="my-1">
         <b-col class="text-right">
           <label for="maxLines" v-b-tooltip title="Only poems containing less than max lines will be displayed">
@@ -26,6 +26,12 @@
           </b-form-invalid-feedback>
         </b-col>
       </b-row>
+      <div slot="modal-footer" class="w-100">
+        <p class="float-left small"><a :href="settings.github" target="_blank">GitHub repo</a></p>
+        <b-btn size="sm" class="float-right" variant="primary" :disabled="!stateOk" @click="updateSettings">
+          Save
+        </b-btn>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -37,7 +43,8 @@ export default {
   },
   data () {
     return {
-      maxLines: this.settings.maxLines
+      maxLines: this.settings.maxLines,
+      show: false
     }
   },
   computed: {
@@ -56,6 +63,7 @@ export default {
       this.maxLines = this.settings.maxLines
     },
     updateSettings () {
+      this.show = false
       if (this.maxLinesState) {
         this.settings.maxLines = this.maxLines
       }
