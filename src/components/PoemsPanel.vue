@@ -32,18 +32,17 @@ export default {
   methods: {
     // loads the poem(s) with the given titles
     loadPoem (...titles) {
-      for (var title of titles) {
+      for (const title of titles) {
         console.debug('Getting poem', title)
-        let self = this
-        self.loadingPoems = true
+        this.loadingPoems = true
         axios.get(this.api + '/title/' + title + ':abs')
           .then(response => {
             console.debug('Got', response.data[0].linecount, 'lines')
-            self.loadingPoems = false
-            if (response.data[0].linecount < self.maxLines) {
-              self.poems.push(response.data[0])
+            this.loadingPoems = false
+            if (response.data[0].linecount < this.maxLines) {
+              this.poems.push(response.data[0])
             } else {
-              self.loadPoem(self.titles[self.counter++])
+              this.loadPoem(this.titles[this.counter++])
             }
           })
           .catch(e => {
@@ -53,15 +52,14 @@ export default {
     },
     // loads all the available titles from the API
     loadTitles () {
-      let self = this
-      self.loadingPoems = true
+      this.loadingPoems = true
       axios.get(this.api + '/title')
         .then(response => {
-          self.titles = response.data.titles
-          console.debug('Got', self.titles.length, 'titles')
-          self.shuffle(self.titles)
+          this.titles = response.data.titles
+          console.debug('Got', this.titles.length, 'titles')
+          this.shuffle(this.titles)
           // let's load 3 poems initially
-          self.loadPoem(self.titles[self.counter++], self.titles[self.counter++], self.titles[self.counter++])
+          this.loadPoem(this.titles[this.counter++], this.titles[this.counter++], this.titles[this.counter++])
         })
         .catch(e => {
           console.error(e)
@@ -69,7 +67,7 @@ export default {
     },
     // shuffles the items in the given array
     shuffle (a) {
-      var j, x, i
+      let j, x, i
       for (i = a.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1))
         x = a[i]
