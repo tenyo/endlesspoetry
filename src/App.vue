@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <app-header :settings="settings"></app-header>
-    <poems-panel :api="settings.api" :maxLines="settings.maxLines"></poems-panel>
+    <app-header :settings="settings" />
+    <poems-panel
+      :api="settings.api"
+      :max-lines="settings.maxLines"
+    />
   </div>
 </template>
 
 <script>
-import AppHeader from './components/Header.vue'
-import PoemsPanel from './components/PoemsPanel.vue'
+import AppHeader from './components/Header.vue';
+import PoemsPanel from './components/PoemsPanel.vue';
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     AppHeader,
     PoemsPanel
@@ -25,9 +28,9 @@ export default {
         // length cutoff for poems - anything longer than maxLines won't be displayed
         maxLines: 100
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
