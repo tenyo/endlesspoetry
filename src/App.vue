@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import AppHeader from './components/Header.vue';
-import PoemsPanel from './components/PoemsPanel.vue';
+import AppHeader from './components/Header.vue'
+import PoemsPanel from './components/PoemsPanel.vue'
 
 export default {
   name: 'App',
@@ -28,9 +28,9 @@ export default {
         // length cutoff for poems - anything longer than maxLines won't be displayed
         maxLines: 100
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style>

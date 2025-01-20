@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   props: ['api', 'maxLines'],
@@ -44,81 +44,81 @@ export default {
       bottom: false,
       counter: 0,
       loadingPoems: false
-    };
+    }
   },
   watch: {
     bottom (bottom) {
       if (bottom && !this.loadingPoems) {
-        this.loadPoem(this.titles[this.counter++]);
+        this.loadPoem(this.titles[this.counter++])
       }
     }
   },
   created () {
-    this.loadTitles();
+    this.loadTitles()
   },
   mounted () {
     // infinite scroll
     window.onscroll = () => {
-      this.bottom = this.bottomVisible();
-    };
+      this.bottom = this.bottomVisible()
+    }
   },
   methods: {
     // loads the poem(s) with the given titles
     loadPoem (...titles) {
       for (const title of titles) {
-        console.debug('Getting poem', title);
-        this.loadingPoems = true;
+        console.debug('Getting poem', title)
+        this.loadingPoems = true
         axios.get(this.api + '/title/' + title + ':abs')
           .then(response => {
-            console.debug('Got', response.data[0].linecount, 'lines');
-            this.loadingPoems = false;
+            console.debug('Got', response.data[0].linecount, 'lines')
+            this.loadingPoems = false
             if (response.data[0].linecount < this.maxLines) {
-              this.poems.push(response.data[0]);
+              this.poems.push(response.data[0])
             } else {
-              this.loadPoem(this.titles[this.counter++]);
+              this.loadPoem(this.titles[this.counter++])
             }
           })
           .catch(e => {
-            console.error(e);
-          });
+            console.error(e)
+          })
       }
     },
     // loads all the available titles from the API
     loadTitles () {
-      this.loadingPoems = true;
+      this.loadingPoems = true
       axios.get(this.api + '/title')
         .then(response => {
-          this.titles = response.data.titles;
-          console.debug('Got', this.titles.length, 'titles');
-          this.shuffle(this.titles);
+          this.titles = response.data.titles
+          console.debug('Got', this.titles.length, 'titles')
+          this.shuffle(this.titles)
           // let's load 3 poems initially
-          this.loadPoem(this.titles[this.counter++], this.titles[this.counter++], this.titles[this.counter++]);
+          this.loadPoem(this.titles[this.counter++], this.titles[this.counter++], this.titles[this.counter++])
         })
         .catch(e => {
-          console.error(e);
-        });
+          console.error(e)
+        })
     },
     // shuffles the items in the given array
     shuffle (a) {
-      let j, x, i;
+      let j, x, i
       for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
+        j = Math.floor(Math.random() * (i + 1))
+        x = a[i]
+        a[i] = a[j]
+        a[j] = x
       }
-      return a;
+      return a
     },
     // return true if the bottom of the page is visible
     bottomVisible () {
-      const scrollY = window.scrollY;
-      const visible = document.documentElement.clientHeight;
-      const pageHeight = document.documentElement.scrollHeight;
-      const bottomOfPage = visible + scrollY >= pageHeight;
-      return bottomOfPage || pageHeight < visible;
+      const scrollY = window.scrollY
+      const visible = document.documentElement.clientHeight
+      const pageHeight = document.documentElement.scrollHeight
+      const bottomOfPage = visible + scrollY >= pageHeight
+      return bottomOfPage || pageHeight < visible
     }
   }
-};
+}
 </script>
 
 <style scoped>

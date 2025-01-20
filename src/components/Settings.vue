@@ -78,31 +78,31 @@ export default {
     return {
       maxLines: this.settings.maxLines,
       show: false
-    };
+    }
   },
   computed: {
     maxLinesState () {
       if (this.maxLines === this.settings.maxLines) {
-        return null;
+        return null
       }
-      return this.maxLines >= 10;
+      return this.maxLines >= 10
     },
     stateOk () {
-      return this.maxLinesState;
+      return this.maxLinesState
     }
   },
   methods: {
     resetSettings () {
-      this.maxLines = this.settings.maxLines;
+      this.maxLines = this.settings.maxLines
     },
     updateSettings () {
-      this.show = false;
+      this.show = false
       if (this.maxLinesState) {
-        this.settings.maxLines = this.maxLines;
+        this.settings.maxLines = this.maxLines
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import AppSettings from './Settings.vue';
+import AppSettings from './Settings.vue'
 
 export default {
   components: {
@@ -39,7 +39,7 @@ export default {
   props: {
     settings: Object
   }
-};
+}
 </script>
 
 <style scoped>
