@@ -1,15 +1,32 @@
 <template>
   <div class="container px-5">
-    <div class="row justify-content-left" v-for="(poem, pid) in poems" :key="pid">
+    <div
+      v-for="(poem, pid) in poems"
+      :key="pid"
+      class="row justify-content-left"
+    >
       <div class="col">
         <h3>{{ poem.title }}</h3>
-        <h4 class="mb-3">{{ poem.author }}</h4>
-        <div v-for="(line, lid) in poem.lines" :key="lid">{{ line }}</div>
+        <h4 class="mb-3">
+          {{ poem.author }}
+        </h4>
+        <div
+          v-for="(line, lid) in poem.lines"
+          :key="lid"
+        >
+          {{ line }}
+        </div>
       </div>
     </div>
-    <div class="row" v-if="loadingPoems">
+    <div
+      v-if="loadingPoems"
+      class="row"
+    >
       <div class="col">
-        <img src="@/assets/images/moving_quill.gif" alt="Loading...">
+        <img
+          src="@/assets/images/moving_quill.gif"
+          alt="Loading..."
+        >
       </div>
     </div>
   </div>
@@ -19,6 +36,7 @@
 import axios from 'axios'
 
 export default {
+  props: ['api', 'maxLines'],
   data () {
     return {
       poems: [],
@@ -28,7 +46,22 @@ export default {
       loadingPoems: false
     }
   },
-  props: ['api', 'maxLines'],
+  watch: {
+    bottom (bottom) {
+      if (bottom && !this.loadingPoems) {
+        this.loadPoem(this.titles[this.counter++])
+      }
+    }
+  },
+  created () {
+    this.loadTitles()
+  },
+  mounted () {
+    // infinite scroll
+    window.onscroll = () => {
+      this.bottom = this.bottomVisible()
+    }
+  },
   methods: {
     // loads the poem(s) with the given titles
     loadPoem (...titles) {
@@ -83,22 +116,6 @@ export default {
       const pageHeight = document.documentElement.scrollHeight
       const bottomOfPage = visible + scrollY >= pageHeight
       return bottomOfPage || pageHeight < visible
-    }
-  },
-  watch: {
-    bottom (bottom) {
-      if (bottom && !this.loadingPoems) {
-        this.loadPoem(this.titles[this.counter++])
-      }
-    }
-  },
-  created () {
-    this.loadTitles()
-  },
-  mounted () {
-    // infinite scroll
-    window.onscroll = () => {
-      this.bottom = this.bottomVisible()
     }
   }
 }
