@@ -20,7 +20,7 @@
     "@vue/eslint-config-standard": "^9.0.0",
     "eslint": "^9.18.0",
     "eslint-plugin-vue": "^9.32.0",
-    "vite": "^2.0.0-beta.23",
+    "vite": "^6.0.7",
     "vite-plugin-vue2": "2.0.3",
     "vue-cli-plugin-bootstrap-vue": "^0.8.2"
   }
